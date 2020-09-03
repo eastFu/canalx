@@ -12,29 +12,32 @@ import com.google.common.collect.Lists;
  */
 public class FlatMessage implements Serializable {
 
-    private static final long         serialVersionUID = -3386650678735860050L;
-    private long                      id;
-    private String                    database;
-    private String                    table;
-    private List<String>              pkNames;
-    private Boolean                   isDdl;
-    private String                    type;
+    private static final long serialVersionUID = -3386650678735860050L;
+    private long id;
+    private String database;
+    private String table;
+    private List<String> pkNames;
+    private Boolean isDdl;
+    private String type;
     // binlog executeTime
-    private Long                      es;
+    private Long es;
     // dml build timeStamp
-    private Long                      ts;
-    private String                    sql;
-    private Map<String, Integer>      sqlType;
-    private Map<String, String>       mysqlType;
+    private Long ts;
+    private String sql;
+    private Map<String, Integer> sqlType;
+    private Map<String, String> mysqlType;
     private List<Map<String, String>> data;
     private List<Map<String, String>> old;
 
-    private Integer                      dist;
+    private Integer dist;
+
+    private String updateTime;
+
 
     public FlatMessage() {
     }
 
-    public FlatMessage(long id){
+    public FlatMessage(long id) {
         this.id = id;
     }
 
@@ -149,11 +152,13 @@ public class FlatMessage implements Serializable {
         this.es = es;
     }
 
+
+
     @Override
     public String toString() {
         return "FlatMessage [id=" + id + ", database=" + database + ", table=" + table + ", isDdl=" + isDdl + ", type="
-               + type + ", es=" + es + ", ts=" + ts + ", sql=" + sql + ", sqlType=" + sqlType + ", mysqlType="
-               + mysqlType + ", data=" + data + ", old=" + old + "]";
+                + type + ", es=" + es + ", ts=" + ts + ", sql=" + sql + ", sqlType=" + sqlType + ", mysqlType="
+                + mysqlType + ", data=" + data + ", old=" + old + ", dist=" + dist + ", updateTime=" + updateTime + "]";
     }
 
     public Integer getDist() {
@@ -162,5 +167,13 @@ public class FlatMessage implements Serializable {
 
     public void setDist(Integer dist) {
         this.dist = dist;
+    }
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
     }
 }

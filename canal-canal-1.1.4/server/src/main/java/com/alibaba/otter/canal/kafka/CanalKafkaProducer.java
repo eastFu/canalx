@@ -2,6 +2,9 @@ package com.alibaba.otter.canal.kafka;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -155,11 +158,26 @@ public class CanalKafkaProducer implements CanalMQProducer {
 
 //            logger.error("canalDestination.getKeys():" + canalDestination.getKeys());
             if (flatMessages != null) {
+
+                //-------------------------------------------------------------------------
+                // 定制化开发,添加msg 参数和屏蔽某些值. dist、updateTime
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
                 for (FlatMessage flatMessage : flatMessages) {
 
-                    //-------------------------------------------------------------------------
-                    // 定制化开发,添加msg 参数和屏蔽某些值
+                    // set dist
                     flatMessage.setDist(canalDestination.getDist());
+
+                    // set updateTime
+                    if(flatMessage.getTs()!=null){
+                        try {
+                            LocalDateTime dateTime = LocalDateTime.ofEpochSecond(flatMessage.getTs()/1000,0, ZoneOffset.ofHours(8));
+                            flatMessage.setUpdateTime(dateTime.format(formatter));
+                        }catch (Exception e) {
+                            logger.error("parse ts to updateTime error", e);
+                        }
+                    }
+
+                    // 剔除某些字段
                     boolean writeNullFlag = true;
                     if (StringUtils.isNotBlank(canalDestination.getKeys())) {
                         writeNullFlag = false;

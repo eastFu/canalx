@@ -76,6 +76,7 @@ public class CanalStarter {
         logger.info("## start the canal server.");
         controller = new CanalController(properties);
         controller.start();
+        controller.start();
         logger.info("## the canal server is running now ......");
         shutdownThread = new Thread() {
 
